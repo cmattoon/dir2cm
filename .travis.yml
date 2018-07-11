@@ -1,0 +1,14 @@
+sudo: required
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - REPO="cmattoon/dir2cm"
+services:
+  - docker
+
+after_success:
+  - docker build -t $REPO:$COMMIT .
+  - export TAG=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "$TRAVIS_BRANCH"; fi)
+  - docker tag "$REPO:$COMMIT" "$REPO:$TAG"
+  - docker push "$REPO:$COMMIT"
+  - docker push "$REPO:$TAG"

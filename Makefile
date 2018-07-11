@@ -1,5 +1,6 @@
 .PHONY: build
 build:
+	@go get -d -v ./...
 	@go build
 
 .PHONY: container

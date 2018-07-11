@@ -10,5 +10,6 @@ after_success:
   - docker build -t $REPO:$COMMIT .
   - export TAG=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "$TRAVIS_BRANCH"; fi)
   - docker tag "$REPO:$COMMIT" "$REPO:$TAG"
+  - echo "$DOCKER_PASSWD" | docker login --username "$DOCKER_USER" --password-stdin
   - docker push "$REPO:$COMMIT"
   - docker push "$REPO:$TAG"

@@ -1,6 +1,8 @@
 cmattoon/dir2cm
 ===============
 
+[![Build Status](https://travis-ci.org/cmattoon/dir2cm.svg?branch=master)](https://travis-ci.org/cmattoon/dir2cm)
+
 Creates a Kubernetes `ConfigMap` from a directory. Due to limitations with `ConfigMap`,
 only files (not directories) in the first-level directory are processed.
 

@@ -8,13 +8,15 @@ LABEL org.label-schema.vcs-url = "https://github.com/cmattoon/dir2cm"
 
 WORKDIR /go/src/github.com/cmattoon/dir2cm
 
-VOLUME ["/app/data"]
-
 RUN apk add --no-cache git
 
 COPY . .
 
 RUN go get -d -v ./...
 RUN go install -v ./...
+
+VOLUME ["/data"]
+
+WORKDIR /data
 
 ENTRYPOINT ["dir2cm"]

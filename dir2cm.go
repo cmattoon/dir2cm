@@ -85,8 +85,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
+
+	name := flag.String("name", "my-config", "The ConfigMap Metadata.Name")
 	dir := flag.String("dir", cwd, "The input directory")
+
 	flag.Parse()
 	
 	//var files []string
@@ -96,7 +98,7 @@ func main() {
 		panic(err)
 	}
 
-	cm := EmptyConfigMap("my-config-map")
+	cm := EmptyConfigMap(*name)
 	
 	for _, file := range files {
 		if file.IsDir() {

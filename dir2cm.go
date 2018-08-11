@@ -7,28 +7,27 @@ import (
 	"os"
 	"path"
 	//"path/filepath"
-	
-	"gopkg.in/yaml.v2"
+
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 )
 
 type MetaData struct {
-	Name string `yaml: name`
+	Name   string            `yaml: name`
 	Labels map[string]string `yaml: labels`
 }
 
 type ConfigMap struct {
-	ApiVersion string `yaml: apiVersion`
-	Kind string `yaml: kind`
-	Metadata MetaData `yaml: metadata`
-	Data map[string]string `yaml: data`
+	ApiVersion string            `yaml: apiVersion`
+	Kind       string            `yaml: kind`
+	Metadata   MetaData          `yaml: metadata`
+	Data       map[string]string `yaml: data`
 }
 
-
-func EmptyConfigMap(name string) (*ConfigMap) {
+func EmptyConfigMap(name string) *ConfigMap {
 	cm := &ConfigMap{
 		ApiVersion: "v1",
-		Kind: "ConfigMap",
+		Kind:       "ConfigMap",
 		Metadata: MetaData{
 			Name: name,
 		},
@@ -38,7 +37,7 @@ func EmptyConfigMap(name string) (*ConfigMap) {
 }
 
 // Adds a file
-func (c *ConfigMap) AddFile(f *ConfigMapFile) (error) {
+func (c *ConfigMap) AddFile(f *ConfigMapFile) error {
 	c.Data[f.Name] = string(f.Contents)
 	return nil
 }
@@ -70,15 +69,14 @@ func NewConfigMapFile(fpath string) (*ConfigMapFile, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	cm := &ConfigMapFile{
-		Path: fpath,
-		Name: path.Base(fpath),
+		Path:     fpath,
+		Name:     path.Base(fpath),
 		Contents: contents,
 	}
 	return cm, nil
 }
-
 
 func main() {
 	cwd, err := os.Getwd()
@@ -90,21 +88,21 @@ func main() {
 	dir := flag.String("dir", cwd, "The input directory")
 
 	flag.Parse()
-	
+
 	//var files []string
 	files, err := ioutil.ReadDir(*dir)
-	
+
 	if err != nil {
 		panic(err)
 	}
 
 	cm := EmptyConfigMap(*name)
-	
+
 	for _, file := range files {
 		if file.IsDir() {
 			continue
 		}
-		
+
 		fullpath := path.Join(*dir, file.Name())
 		cmf, err := NewConfigMapFile(fullpath)
 		if err != nil {

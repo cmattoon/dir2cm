@@ -3,25 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
-	//"path/filepath"
 
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type MetaData struct {
-	Name   string            `yaml: name`
-	Labels map[string]string `yaml: labels`
+	Name   string            `yaml:"name"`
+	Labels map[string]string `yaml:"labels,omitempty"`
 }
 
 type ConfigMap struct {
-	ApiVersion string            `yaml: apiVersion`
-	Kind       string            `yaml: kind`
-	Metadata   MetaData          `yaml: metadata`
-	Data       map[string]string `yaml: data`
+	ApiVersion string            `yaml:"apiVersion"`
+	Kind       string            `yaml:"kind"`
+	Metadata   MetaData          `yaml:"metadata"`
+	Data       map[string]string `yaml:"data"`
 }
 
 func EmptyConfigMap(name string) *ConfigMap {
@@ -59,13 +57,13 @@ type ConfigMapFile struct {
 	// Actual FS path
 	Path string
 	// Name/key for configmap (basename(Path))
-	Name string `yaml: name`
+	Name string `yaml:"name"`
 	// Contents (as bytes)
 	Contents []byte
 }
 
 func NewConfigMapFile(fpath string) (*ConfigMapFile, error) {
-	contents, err := ioutil.ReadFile(fpath)
+	contents, err := os.ReadFile(fpath)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +88,7 @@ func main() {
 	flag.Parse()
 
 	//var files []string
-	files, err := ioutil.ReadDir(*dir)
+	files, err := os.ReadDir(*dir)
 
 	if err != nil {
 		panic(err)

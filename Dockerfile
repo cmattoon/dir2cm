@@ -1,4 +1,4 @@
-FROM library/golang:1.9.2-alpine
+FROM library/golang:1.20.4-alpine
 
 LABEL org.label-schema.schema-version = "1.0.0"
 LABEL org.label-schema.name = "dir2cm"
@@ -12,7 +12,6 @@ RUN apk add --no-cache git
 
 COPY . .
 
-RUN go get -d -v ./...
 RUN go install -v ./...
 
 VOLUME ["/data"]
